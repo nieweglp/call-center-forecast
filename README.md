@@ -49,6 +49,40 @@ While the core task is to generate accurate predictions, here are some optional 
 2. **Aggregation:** Aggregate the data to the `EmitDate` level to facilitate more effective time-series analysis.
 3. **Feature Enrichment:** Enhance your analysis by incorporating external data sources or fields that could influence roadside assistance call volumes, such as weather conditions, public holidays, or local events. Be creative in identifying and integrating these features to uncover seasonality and trends.
    
-### Contest Rules
+# Contest Rules
 
-TODO
+## Organizer
+
+The contest is organized by Falck Digital Technology Poland Sp. z o.o., based in Warsaw.
+
+## Participants
+
+The contest is open to individuals who are of legal age. Employees and co-workers of Falck Digital Technology are not eligible to participate.
+
+## Contest Objective
+
+Participants are required to develop a predictive machine learning model using Python to forecast daily call volumes for Falck’s Roadside Assistance Services in Denmark for December 2023.
+
+## Participation Conditions
+
+- Participation is voluntary and free.
+- Participants must download the dataset and submit their predictions in the specified format.
+- Predictions should be submitted via email to pedro.rodrigues@falck.com with the subject “[pytech_contest]”.
+
+## Evaluation and Prizes
+
+- Submissions will be evaluated based on the Mean Absolute Percentage Error (MAPE) of the predictions.
+- The participant with the most accurate predictions will be awarded a prize.
+- Winners will be notified via email.
+
+### There are three prizes to be won:
+
+1. **1st prize:** High-end gaming laptop - MSI Vector 16 HX i9-14900HX/32GB/1TB/Win11 RTX4080 240Hz
+2. **2nd prize:** VR headset - OCULUS Meta Quest 3 512GB
+3. **3rd prize:** Noise cancelling headphones - Sony WH-1000XM5
+
+## Final Provisions
+
+- The organizer reserves the right to modify the contest rules.
+- Additional prizes may be awarded at the organizer's discretion.
+

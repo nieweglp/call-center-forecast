@@ -5,17 +5,17 @@ The dataset has been partitioned into three separate Parquet files to manage siz
 ### Partition Details
 
 1. **Partition 1**
-   - **File Path**: `dataset/assistance_train_dataset_part1.parquet`
+   - **File Path**: `dataset/assistance_train_dataset_1.parquet`
    - **Date Range**: March 6, 2022, to October 31, 2022
    - **Description**: This partition contains call records from the early part of the dataset, covering the initial months of data collection.
 
 2. **Partition 2**
-   - **File Path**: `dataset/assistance_train_dataset_part2.parquet`
+   - **File Path**: `dataset/assistance_train_dataset_2.parquet`
    - **Date Range**: November 1, 2022, to May 31, 2023
    - **Description**: This partition includes call records from the middle period of the dataset, capturing seasonal trends and variations.
 
 3. **Partition 3**
-   - **File Path**: `dataset/assistance_train_dataset_part3.parquet`
+   - **File Path**: `dataset/assistance_train_dataset_3.parquet`
    - **Date Range**: June 1, 2023, to November 30, 2023
    - **Description**: This partition contains the most recent call records, providing insights into the latest patterns and behaviors.
 

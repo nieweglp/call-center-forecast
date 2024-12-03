@@ -10,7 +10,7 @@
 
 ### Goal
 
-Using Python, develop a predictive machine learning model to forecast daily call volumes for Falck Digital Technology’s Roadside Assistance Services in Denmark for December 2023. The goal is to accurately predict the total number of calls for each day in December 2023, leveraging historical data and any relevant external factors. Once completed, submit your predictions in the specified format to pedro.rodrigues@falck.com.
+Using Python, develop a predictive machine learning model to forecast daily call volumes for Falck Digital Technology’s Roadside Assistance Services in Denmark for December 2023. **_The goal is to accurately predict the total number of calls for each day in December 2023_**, leveraging historical data and any relevant external factors. Once completed, submit your predictions in the specified format to pedro.rodrigues@falck.com.
 
 ### Instructions
 

@@ -69,6 +69,11 @@ Participants are required to develop a predictive machine learning model using P
 - Participants must download the dataset and submit their predictions in the specified format.
 - Predictions should be submitted via email to pedro.rodrigues@falck.com with the subject “[pytech_contest]”.
 
+## Contest Deadline
+
+- All answers must be submitted by the end of the day on Sunday, December 15, 2024.
+- The competition results and winners will be announced by Friday, December 20, 2024, at the latest.
+
 ## Evaluation and Prizes
 
 - Submissions will be evaluated based on the Mean Absolute Percentage Error (MAPE) of the predictions.
@@ -86,3 +91,8 @@ Participants are required to develop a predictive machine learning model using P
 - The organizer reserves the right to modify the contest rules.
 - Additional prizes may be awarded at the organizer's discretion.
 
+# Personal Data Protection Policy
+- https://brandportal.falck.com/m/25920523dcaea8ac/original/Personal-Data-Protection-Policy-v3-2021-01-06.pdf
+
+# Falck Data Ethics Policy
+- https://brandportal.falck.com/m/d8a08a0c3eeb471/original/Falck-Data-Ethics-Policy.pdf

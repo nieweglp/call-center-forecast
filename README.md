@@ -5,7 +5,7 @@
 
 ## Time-Series Forecasting
 
-**Data Time Period:** March 2022 to November 2023  
+**Data Time Period:** March 2022 to November 2023
 **Estimated Time to Complete:** 4-8 hours
 
 ### Goal
@@ -24,7 +24,7 @@ Using Python, develop a predictive machine learning model to forecast daily call
 3. **Model Training and Prediction:**
    - **Model Training:** Train your best machine learning model to generate predictions for the 31 days of December 2023.
    - **Output Format:** The predictions should be saved in a `.json` file with the following format as a list with 31 numeric predictions:
-     
+
      ```json
      {
        "predictions": [
@@ -48,7 +48,7 @@ While the core task is to generate accurate predictions, here are some optional 
 1. **Cleaning:** Consider addressing missing values, outliers, and inconsistencies in the dataset. Adding relevant features might also enhance prediction accuracy.
 2. **Aggregation:** Aggregate the data to the `EmitDate` level to facilitate more effective time-series analysis.
 3. **Feature Enrichment:** Enhance your analysis by incorporating external data sources or fields that could influence roadside assistance call volumes, such as weather conditions, public holidays, or local events. Be creative in identifying and integrating these features to uncover seasonality and trends.
-   
+
 # Contest Rules
 
 ## Organizer

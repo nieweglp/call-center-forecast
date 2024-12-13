@@ -1,0 +1,12 @@
+model_options:
+  test_size: 0.2
+  random_state: 123
+  features:
+    - Calltime
+    - Agent
+    - External
+    - User
+    - Voicemail
+    - Inbound
+    - Outbound
+    - review_scores_rating

@@ -67,11 +67,15 @@ regressor:
 
 metrics:
   type: tracking.MetricsDataset
-  filepath: data/09_tracking/metrics.json
+  filepath: data/06_models/metrics.json
 
 columns:
   type: tracking.JSONDataset
-  filepath: data/09_tracking/columns.json
+  filepath: data/06_models/columns.json
+
+predictions_json:
+  type: tracking.JSONDataset
+  filepath: data/07_model_output/predictions.json
 
 # shuttle_passenger_capacity_plot_exp:
 #   type: plotly.PlotlyDataset

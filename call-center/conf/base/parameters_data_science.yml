@@ -1,12 +1,19 @@
 model_options:
   test_size: 0.2
   random_state: 123
+  target: Calls
   features:
-    - Calltime
-    - Agent
-    - External
-    - User
-    - Voicemail
-    - Inbound
-    - Outbound
-    - review_scores_rating
+    - Year
+    - Month
+    - Day
+    - Day_of_week
+    - Week_of_year
+    - Day_of_year
+    - Is_weekend
+    - Day_of_week_sin
+    - Day_of_week_cos
+    - Month_sin
+    - Month_cos
+    - Year_sin
+    - Year_cos
+  output_path: data/07_model_output/predictions.json

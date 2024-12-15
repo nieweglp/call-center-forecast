@@ -10,3 +10,5 @@ mlflow
 kedro-mlflow
 kedro-ipython
 pre-commit
+holidays
+xgboost

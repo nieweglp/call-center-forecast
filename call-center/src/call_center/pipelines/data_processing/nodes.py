@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
+import holidays
+from requests import get
 
 
 def _utils_dates(df: pd.DataFrame) -> pd.DataFrame:
@@ -10,25 +13,63 @@ def _utils_dates(df: pd.DataFrame) -> pd.DataFrame:
 
 def _extract_info_from_dates(dates: pd.Series) -> pd.DataFrame:
     df = pd.DataFrame(dates)
-    df["year"] = dates.dt.year
-    df["month"] = dates.dt.month
-    df["day"] = dates.dt.day
-    df["day_of_week"] = dates.dt.dayofweek
-    df["week_of_year"] = dates.dt.isocalendar().week
-    df["day_of_year"] = dates.dt.dayofyear
-    df["is_weekend"] = dates.isin([5, 6]).astype(int)
-    df["day_of_week_sin"] = np.sin(2 * np.pi * df["day_of_week"] / 7)
-    df["day_of_week_cos"] = np.cos(2 * np.pi * df["day_of_week"] / 7)
-    df["month_sin"] = np.sin(2 * np.pi * df["month"] / 12)
-    df["month_cos"] = np.cos(2 * np.pi * df["month"] / 12)
+    df["Year"] = dates.dt.year
+    df["Month"] = dates.dt.month
+    df["Day"] = dates.dt.day
+    df["Day_of_week"] = dates.dt.dayofweek
+    df["Week_of_year"] = dates.dt.isocalendar().week
+    df["Day_of_year"] = dates.dt.dayofyear
+    df["Is_weekend"] = dates.isin([5, 6]).astype(int)
+    df["Day_of_week_sin"] = np.sin(2 * np.pi * df["day_of_week"] / 7)
+    df["Day_of_week_cos"] = np.cos(2 * np.pi * df["day_of_week"] / 7)
+    df["Month_sin"] = np.sin(2 * np.pi * df["month"] / 12)
+    df["Month_cos"] = np.cos(2 * np.pi * df["month"] / 12)
 
     day_of_year = dates.dt.dayofyear
     days_in_year = dates.dt.is_leap_year.apply(lambda x: 366 if x else 365)
 
-    df["year_sin"] = np.sin(2 * np.pi * day_of_year / days_in_year)
-    df["year_cos"] = np.cos(2 * np.pi * day_of_year / days_in_year)
+    df["Year_sin"] = np.sin(2 * np.pi * day_of_year / days_in_year)
+    df["Year_cos"] = np.cos(2 * np.pi * day_of_year / days_in_year)
 
     return df
+
+
+def _generate_holidays_dates(parameters: dict) -> pd.DataFrame:
+    date_range = pd.date_range(start=parameters["start_date"], end=parameters["end_date"])
+    denmark_holidays = holidays.Denmark(years=[2022, 2023])
+
+    data = {
+        "Date": date_range,
+        "Is_holiday": [1 if date in denmark_holidays else 0 for date in date_range]
+    }
+    return pd.DataFrame(data)
+
+def _get_weather_data(location, parameters: dict) -> pd.DataFrame:
+    url = (
+        f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
+        f"{location}/{parameters['start_date']}/{parameters['end_date']}"
+    )
+    params = {
+        "unitGroup": "metric",
+        "key": parameters["WEATHER_API_KEY"],
+        "contentType": "json",
+        "include": "days"
+    }
+
+    response = get(url, params=params)
+    data_historical = response.json()
+
+    historical_days = data_historical["days"]
+    df_weather = pd.DataFrame(historical_days)
+    df_weather["Date"] = pd.to_datetime(df_weather["datetime"])
+    df_conditions_one_hot_encoding = pd.get_dummies(df_weather['conditions'], drop_first=True) * 1
+    weather_cols = ['tempmax', 'tempmin', 'temp', 'dew', 'humidity',
+       'precip', 'windspeed', 'pressure']
+
+    df_weather = pd.concat([df_weather[weather_cols], df_conditions_one_hot_encoding], axis=1)
+    new_cop_cols = [location + "_" + col for col in df_weather.columns]
+    df_weather.columns = [col.replace(" ", "_").replace(",","") for col in new_cop_cols]
+    return df_weather
 
 
 def concat_files(
@@ -50,21 +91,21 @@ def concat_files(
 
 def extract_from_dates(assistance_train_dataset: pd.DataFrame) -> pd.DataFrame:
     """ """
-    assistance_train_dataset = _utils_dates(assistance_train_dataset)
-    return assistance_train_dataset
+    assistance_train_dataset_dates = _utils_dates(assistance_train_dataset)
+    return assistance_train_dataset_dates
 
 
-def aggregate_per_day(df: pd.DataFrame) -> pd.DataFrame:
+def aggregate_per_day(assistance_train_dataset_dates: pd.DataFrame) -> pd.DataFrame:
     """ """
     df_agg_calls = (
-        df.groupby("Date")["EmitDate"]
+        assistance_train_dataset_dates.groupby("Date")["EmitDate"]
         .count()
         .reset_index()
         .rename(columns={"EmitDate": "Calls"})
     )
-    df_agg_call_time = df.groupby("Date")["CallTime"].sum().reset_index()
-    df_agg_call_type = pd.crosstab(df["Date"], df["CallType"]).reset_index()
-    df_agg_call_direction = pd.crosstab(df["Date"], df["CallDirection"]).reset_index()
+    df_agg_call_time = assistance_train_dataset_dates.groupby("Date")["CallTime"].sum().reset_index()
+    df_agg_call_type = pd.crosstab(assistance_train_dataset_dates["Date"], assistance_train_dataset_dates["CallType"]).reset_index()
+    df_agg_call_direction = pd.crosstab(assistance_train_dataset_dates["Date"], assistance_train_dataset_dates["CallDirection"]).reset_index()
 
     df_agg_numerical = df_agg_calls.merge(df_agg_call_time, on="Date")
     df_agg_categories = df_agg_call_type.merge(df_agg_call_direction, on="Date")
@@ -74,55 +115,18 @@ def aggregate_per_day(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def enhance_dates(df: pd.DataFrame) -> pd.DataFrame:
-    _extract_info_from_dates(df["Date"])
+    """ """
+    df_enhanced_dates = _extract_info_from_dates(df["Date"])
+    return df_enhanced_dates
 
 
-def preprocess_companies(companies: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
-    """Preprocesses the data for companies.
-
-    Args:
-        companies: Raw data.
-    Returns:
-        Preprocessed data, with `company_rating` converted to a float and
-        `iata_approved` converted to boolean.
+def create_model_input_table(df_enhanced_dates: pd.DataFrame, parameters: dict) -> pd.DataFrame:
     """
-    companies["iata_approved"] = _is_true(companies["iata_approved"])
-    companies["company_rating"] = _parse_percentage(companies["company_rating"])
-    return companies, {"columns": companies.columns.tolist(), "data_type": "companies"}
-
-
-def preprocess_shuttles(shuttles: pd.DataFrame) -> pd.DataFrame:
-    """Preprocesses the data for shuttles.
-
-    Args:
-        shuttles: Raw data.
-    Returns:
-        Preprocessed data, with `price` converted to a float and `d_check_complete`,
-        `moon_clearance_complete` converted to boolean.
-    """
-    shuttles["d_check_complete"] = _is_true(shuttles["d_check_complete"])
-    shuttles["moon_clearance_complete"] = _is_true(shuttles["moon_clearance_complete"])
-    shuttles["price"] = _parse_money(shuttles["price"])
-    return shuttles
-
-
-def create_model_input_table(
-    shuttles: pd.DataFrame, companies: pd.DataFrame, reviews: pd.DataFrame
-) -> pd.DataFrame:
-    """Combines all data to create a model input table.
-
-    Args:
-        shuttles: Preprocessed data for shuttles.
-        companies: Preprocessed data for companies.
-        reviews: Raw data for reviews.
-    Returns:
-        Model input table.
 
     """
-    rated_shuttles = shuttles.merge(reviews, left_on="id", right_on="shuttle_id")
-    rated_shuttles = rated_shuttles.drop("id", axis=1)
-    model_input_table = rated_shuttles.merge(
-        companies, left_on="company_id", right_on="id"
-    )
-    model_input_table = model_input_table.dropna()
+    df_holidays = _generate_holidays_dates(parameters)
+    # df_weather_copenhagen = _get_weather_data("Copenhagen, Denmark")
+    # df_weather_aarhus = _get_weather_data("Aarhus, Denmark")
+
+    model_input_table = df_enhanced_dates.merge(df_holidays, on="Date")
     return model_input_table
